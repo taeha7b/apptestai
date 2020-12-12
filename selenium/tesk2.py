@@ -18,14 +18,25 @@ with open('./test.json', 'r') as f:
     num = 1
     for i in json_data:
         xpath = json_data[i]
-        print(i)
         driver.find_element_by_xpath(xpath).click()
-        driver.save_screenshot(f'./screenshot/screenshot_{num}_{i}.png')
-        num+=1
-        time.sleep(2)
+        if i == 'email':
+            driver.switch_to.window(driver.window_handles[-1])
+            driver.close()
+            driver.switch_to.window(driver.window_handles[0])
+            num+=1
+
+        if len(driver.window_handles) > 1:
+            driver.switch_to.window(driver.window_handles[-1])
+            time.sleep(5)
+            driver.save_screenshot(f'./screenshot/screenshot_{num}_{i}.png')
+            driver.close()
+            driver.switch_to.window(driver.window_handles[0])
+            num+=1
+        else:
+            driver.save_screenshot(f'./screenshot/screenshot_{num}_{i}.png')
+            num+=1
         if i == 'documents':
             driver.back()
             time.sleep(1)
-        print("Done")
 
-    driver.quit()
+driver.quit()
