@@ -1,5 +1,5 @@
 class UserDao:
-    def enroll_user(self, user_info, db): 
+    def enroll_user(self, user_info, session): 
         """
             고객 정보 생성(Persistence Layer)
             Args :
@@ -10,15 +10,14 @@ class UserDao:
             Author :
                 taeha7b@gmail.com (김태하)
         """
-        with db.cursor() as cursor: 
-            sql_1 = """ 
+       
+        sql_1 = """ 
             INSERT INTO users (
                 account
             ) VALUES(%s)
             """
-            results_1 = cursor.execute(sql_1,user_info['account'])
-            lastrowid = cursor.lastrowid
-            sql_2 = """
+        lastrowid = session.bind.execute(sql_1,user_info['account']).lastrowid
+        sql_2 = """
             INSERT INTO user_details (
             user_id,
             name,
@@ -26,7 +25,7 @@ class UserDao:
             memo
             ) VALUES (%s,%s,%s,%s)
             """
-            results_2 = cursor.execute(sql_2, 
+        results = session.bind.execute(sql_2, 
                 (
                     lastrowid,
                     user_info['name'],
@@ -34,9 +33,9 @@ class UserDao:
                     user_info['memo']
                 )
             )
-            return results_2
+        return results
 
-    def user_list(self, pagination, db):
+    def user_list(self, pagination, session):
         """
             고객 정보 목록 조회(Persistence Layer)
             Args :
@@ -47,20 +46,18 @@ class UserDao:
             Author :
                 taeha7b@gmail.com (김태하)
         """
-        with db.cursor() as cursor:
-            sql = """ 
+        sql = """ 
             SELECT u.id, u.account, ud.name, ud.birthday, ud.memo 
             FROM users as u INNER JOIN user_details as ud 
             ON u.id = ud.user_id LIMIT %s OFFSET %s;
-            """
-            cursor.execute(sql,(
-                pagination['limit'],
-                pagination['limit']*pagination['page']
-                ))
-            results = cursor.fetchall()
-            return results
+        """
+        results = session.bind.execute(sql,(
+            pagination['limit'],
+            pagination['limit']*pagination['page']
+            )).fetchall()
+        return results
 
-    def user_detail(self, account, db):
+    def user_detail(self, account, session):
         """
             고객 정보 상세 조회(Persistence Layer)
             Args :
@@ -71,18 +68,18 @@ class UserDao:
             Author :
                 taeha7b@gmail.com (김태하)
         """
-        with db.cursor() as cursor:
-            sql = """ 
+  
+        sql = """ 
             SELECT u.id, u.account, ud.name, ud.birthday, ud.memo 
             FROM users as u INNER JOIN user_details as ud 
             ON u.id = ud.user_id 
             AND u.account = %s;
-            """
-            cursor.execute(sql, account)
-            results = cursor.fetchone()
-            return results
+        """
+        
+        results = session.bind.execute(sql, account).fetchone()
+        return results
 
-    def update_user(self, user_info, db):
+    def update_user(self, user_info, session):
         """
             고객 정보 변경(Persistence Layer)
              Args :
@@ -93,25 +90,25 @@ class UserDao:
             Author :
                 taeha7b@gmail.com (김태하)
         """
-        with db.cursor() as cursor: 
-            sql = """
+       
+        sql = """
             UPDATE user_details SET
             name = %s,
             birthday = %s,
             memo = %s
             WHERE user_id = %s
             """
-            results = cursor.execute(sql, 
-                (   
-                    user_info['name'],
-                    user_info['birthday'],
-                    user_info['memo'],
-                    user_info['id']
-                )
+        results = session.bind.execute(sql, 
+            (   
+                user_info['name'],
+                user_info['birthday'],
+                user_info['memo'],
+                user_info['id']
             )
-            return results
+        )
+        return results
 
-    def delete_user(self, user_info, db):
+    def delete_user(self, user_info, session):
         """
             고객 정보 삭제(Persistence Layer)
              Args :
@@ -122,14 +119,14 @@ class UserDao:
             Author :
                 taeha7b@gmail.com (김태하)
         """
-        with db.cursor() as cursor: 
-            sql = """ 
+      
+        sql = """ 
             DELETE FROM users WHERE account = %s
-            """
-            results = cursor.execute(sql,user_info['account'])
-            return results
+        """
+        results = session.bind.execute(sql,user_info['account'])
+        return results
 
-    def account_checker(self, user_info, db):
+    def account_checker(self, user_info, session):
         """
             아이디 확인(Persistence Layer)
              Args :
@@ -142,19 +139,18 @@ class UserDao:
             Author :
                 taeha7b@gmail.com (김태하)
         """
-        with db.cursor() as cursor: 
-            sql = """ 
+       
+        sql = """ 
             SELECT EXISTS (
                 SELECT account 
                 FROM users 
                 WHERE account = %s) 
                 as 'check'
             """
-            cursor.execute(sql, user_info['account'])
-            results = cursor.fetchone()
-            return results
+        results = session.bind.execute(sql, user_info['account']).fetchone()
+        return results
 
-    def pk_checker(self, user_info, db):
+    def pk_checker(self, user_info, session):
         """
             고유키 확인(Persistence Layer)
             Args :
@@ -167,14 +163,13 @@ class UserDao:
             Author :
                 taeha7b@gmail.com (김태하)
         """
-        with db.cursor() as cursor: 
-            sql = """ 
+         
+        sql = """ 
             SELECT EXISTS (
                 SELECT account 
                 FROM users 
                 WHERE id = %s) 
                 as 'check'
             """
-            cursor.execute(sql, user_info['id'])
-            results = cursor.fetchone()
-            return results
+        results = session.bind.execute(sql, user_info['id']).fetchone()
+        return results

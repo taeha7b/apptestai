@@ -9,7 +9,7 @@ class UserService:
     def __init__(self, user_dao):
         self.user_dao = user_dao
 
-    def enroll_user(self, user_info, db):
+    def enroll_user(self, user_info, session):
         """
             고객 정보 생성(Business Layer)
             Args :
@@ -30,15 +30,14 @@ class UserService:
             return 'birthday_validate'
         elif account_validate(user_info.get('account')):
             return 'account_validate'
-        
-        
-        existence_check = self.user_dao.account_checker(user_info, db)
+       
+        existence_check = self.user_dao.account_checker(user_info, session)
         if existence_check['check'] == 1:
             return False
-        results = self.user_dao.enroll_user(user_info, db)
+        results = self.user_dao.enroll_user(user_info, session)
         return results
 
-    def user_list(self, page, db):
+    def user_list(self, page, session):
         """
             고객 정보 목록 조회(Business Layer)
             Args :
@@ -51,12 +50,14 @@ class UserService:
         """
         page = int(page)-1
         pagination = {"page":page, "limit":2}
-        results = self.user_dao.user_list(pagination, db)
+        results = self.user_dao.user_list(pagination, session)
+        convert_results = []
         for user in results:
-            user['birthday'] = user['birthday'].strftime('%Y-%m-%d')
-        return results
+            id, account, name, birthday, memo = user
+            convert_results.append({'id':id, 'account':account, 'name':name, 'birthday':birthday.strftime('%Y-%m-%d'), 'memo':memo})
+        return convert_results
 
-    def update_user(self, user_info, db):
+    def update_user(self, user_info, session):
         """
             고객 정보 변경(Business Layer)
             Args :
@@ -75,13 +76,13 @@ class UserService:
         elif name_validate(user_info.get('name')):
             return 'name_validate'
 
-        existence_check = self.user_dao.pk_checker(user_info, db)
+        existence_check = self.user_dao.pk_checker(user_info, session)
         if existence_check['check'] == 0:
             return False
-        results = self.user_dao.update_user(user_info, db)
+        results = self.user_dao.update_user(user_info, session)
         return results
 
-    def delete_user(self, user_info, db):
+    def delete_user(self, user_info, session):
         """
             고객 정보 삭제(Business Layer)
             Args :
@@ -97,23 +98,25 @@ class UserService:
         if account_validate(user_info.get('account')):
             return 'account_validate'
 
-        existence_check = self.user_dao.account_checker(user_info, db)
+        existence_check = self.user_dao.account_checker(user_info, session)
         if existence_check['check'] == 0:
             return False
-        results = self.user_dao.delete_user(user_info, db)
+        results = self.user_dao.delete_user(user_info, session)
         return results
 
-    def user_detail(self, user_info, db):
+    def user_detail(self, account, session):
         """
             고객 정보 상세 조회(Business Layer)
             Args :
-                user_info: 고객 데이터
+                account: 고객 아이디
                 db : 데이터베이스 연결객체
             Returns :
                 results: 고객 정보 상세 조회 결과
             Author :
                 taeha7b@gmail.com (김태하)
         """
-        results = self.user_dao.user_detail(user_info, db)
-        results['birthday'] = results['birthday'].strftime('%Y-%m-%d')
-        return results
+     
+        results = self.user_dao.user_detail(account, session)
+        id, account, name, birthday, memo = results
+        convert_results = {'id':id, 'account':account, 'name':name, 'birthday':birthday.strftime('%Y-%m-%d'), 'memo':memo}
+        return convert_results

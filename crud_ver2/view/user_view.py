@@ -1,18 +1,17 @@
 from flask import jsonify, request
 from flask.views import MethodView
 from pymysql import err
-from connection import get_connection
 from validation import (
     AccountValidattionError,
     NameValidattionError, 
     BirthdayValidattionError
     )
-    
+  
 
 class UserMgmt(MethodView):
-    def __init__(self, service):
+    def __init__(self, service, Session):
         self.service = service
-
+        self.session = Session
     def post(self):
         """
             고객 정보 생성(Presentation Layer)
@@ -25,9 +24,10 @@ class UserMgmt(MethodView):
                 taeha7b@gmail.com (김태하)
         """
         try:
+
             user_info = request.json
-            db = get_connection()
-            enroll_user = self.service.enroll_user(user_info, db)
+            session = self.session
+            enroll_user = self.service.enroll_user(user_info, session)
             if enroll_user == 'name_validate':
                 raise NameValidattionError('올바른 이름이 아닙니다')
             elif enroll_user == 'birthday_validate':
@@ -38,7 +38,7 @@ class UserMgmt(MethodView):
                 return jsonify({'message': '이미 존재하는 아이디 입니다.'}), 400
             
         except (err.OperationalError, err.InternalError, err.ProgrammingError, err.IntegrityError) as e:
-            db.rollback()
+            session.rollback()
             message = {"error_number": e.args[0], "err_value": e.args[1]}
             return jsonify(message), 400
 
@@ -52,11 +52,11 @@ class UserMgmt(MethodView):
             return jsonify({'message': e.message}), 400
 
         else:
-            db.commit()
+            session.commit()
             return jsonify({'message':'SUCCESS'}), 201
 
         finally:
-            db.close()
+            session.close()
 
     def get(self):
         """
@@ -70,16 +70,16 @@ class UserMgmt(MethodView):
                 taeha7b@gmail.com (김태하)
         """
         try:
-            db = get_connection()
+            session = self.session
             page = request.args.get('page')
-            user_list = self.service.user_list(page, db)
+            user_list = self.service.user_list(page, session)
             return jsonify(user_list), 200
 
         except:
             return jsonify({'message':'UNSUCCESS'}), 400
 
         finally:
-            db.close()
+            session.close()
 
     def put(self):
         """
@@ -94,8 +94,8 @@ class UserMgmt(MethodView):
         """
         try:
             user_info = request.json
-            db = get_connection()
-            update_user = self.service.update_user(user_info, db)
+            session = self.session
+            update_user = self.service.update_user(user_info, session)
             if update_user == 'name_validate':
                 raise NameValidattionError('올바른 이름이 아닙니다')
             elif update_user == 'birthday_validate':
@@ -120,11 +120,11 @@ class UserMgmt(MethodView):
             return jsonify({'message': e.message}), 400
 
         else:
-            db.commit()
+            session.commit()
             return jsonify({'message':'SUCCESS'}), 200
 
         finally:
-            db.close()
+            session.close()
 
     def delete(self):
         """
@@ -139,15 +139,15 @@ class UserMgmt(MethodView):
         """
         try:
             user_info = request.json
-            db = get_connection()
-            delete_user = self.service.delete_user(user_info, db)
+            session = self.session
+            delete_user = self.service.delete_user(user_info, session)
             if delete_user == 'account_validate':
                 raise AccountValidattionError('올바른 아이디 형식이 아닙니다.')
             elif delete_user is False:
                 return jsonify({'message': '존재 하지 않는 아이디 입니다.'}), 400
 
         except (err.OperationalError, err.InternalError, err.ProgrammingError, err.IntegrityError) as e:
-            db.rollback()
+            session.rollback()
             message = {"error_number": e.args[0], "err_value": e.args[1]}
             return jsonify(message), 400
 
@@ -155,17 +155,18 @@ class UserMgmt(MethodView):
             return jsonify({'message': e.message}), 400
 
         else:
-            db.commit()
+            session.commit()
             return jsonify({'message':'SUCCESS'}), 200
         finally:
-            db.close()
+            session.close()
 
 
 class UserDetail(MethodView):
-    def __init__(self, service):
+    def __init__(self, service, Session):
         self.service = service
+        self.session = Session
 
-    def get(self,user_info):
+    def get(self,account):
         """
             고객 정보 상세 조회(Presentation Layer)
             Returns :
@@ -177,13 +178,13 @@ class UserDetail(MethodView):
                 taeha7b@gmail.com (김태하)
         """
         try:
-            db = get_connection()
-            user_detail = self.service.user_detail(user_info, db)
+            session = self.session
+            user_detail = self.service.user_detail(account, session)
             return jsonify(user_detail), 200
 
         except:
             return jsonify({'message':'UNSUCCESS'}), 400
 
         finally:
-            db.close()
+            session.close()
 
