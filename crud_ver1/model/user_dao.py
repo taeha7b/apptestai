@@ -1,5 +1,3 @@
-import pymysql
-
 class UserDao:
     def enroll_user(self, user_info, db): 
         with db.cursor() as cursor: 

@@ -87,4 +87,3 @@ class UserDetail(MethodView):
 
         finally:
             db.close()
-
