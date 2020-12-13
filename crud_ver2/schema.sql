@@ -6,7 +6,7 @@ USE apptestai;
 CREATE TABLE users
 (
     `id`      INT         NOT NULL AUTO_INCREMENT, 
-    `account` VARCHAR(64) NOT NULL, 
+    `account` VARCHAR(64) NOT NULL UNIQUE,
     PRIMARY KEY (id)
 );
 
