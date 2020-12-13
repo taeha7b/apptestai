@@ -4,7 +4,7 @@ class UserDao:
             고객 정보 생성(Persistence Layer)
             Args :
                 user_info: 고객 데이터
-                db : 데이터베이스 연결객체
+                session : 데이터베이스 연결객체
             Returns :
                 results_2: 고객 정보 생성 결과
             Author :
@@ -40,7 +40,7 @@ class UserDao:
             고객 정보 목록 조회(Persistence Layer)
             Args :
                 pagination: LIMIT와 OFFSET가 있는 딕셔너리
-                db : 데이터베이스 연결객체
+                session : 데이터베이스 연결객체
             Returns :
                 results: 고객 정보 목록 조회 결과
             Author :
@@ -62,7 +62,7 @@ class UserDao:
             고객 정보 상세 조회(Persistence Layer)
             Args :
                 account: 유저의 아이디
-                db : 데이터베이스 연결객체
+                session : 데이터베이스 연결객체
             Returns :
                 results: 고객 정보 상세 조회 결과
             Author :
@@ -84,7 +84,7 @@ class UserDao:
             고객 정보 변경(Persistence Layer)
              Args :
                 user_info: 유저의 아이디
-                db : 데이터베이스 연결객체
+                session : 데이터베이스 연결객체
             Returns :
                 results: 고객 정보 변경 결과
             Author :
@@ -113,7 +113,7 @@ class UserDao:
             고객 정보 삭제(Persistence Layer)
              Args :
                 user_info: 유저의 아이디
-                db : 데이터베이스 연결객체
+                session : 데이터베이스 연결객체
             Returns :
                 results: 고객 정보 삭제 결과
             Author :
@@ -131,7 +131,7 @@ class UserDao:
             아이디 확인(Persistence Layer)
              Args :
                 user_info: 유저의 아이디
-                db : 데이터베이스 연결객체
+                session : 데이터베이스 연결객체
             Returns :
                 results: 아이디 확인 결과값 
                         아이디가 일을시: {"check":1} 
@@ -155,7 +155,7 @@ class UserDao:
             고유키 확인(Persistence Layer)
             Args :
                 user_info: 유저의 아이디
-                db : 데이터베이스 연결객체
+                session : 데이터베이스 연결객체
             Returns :
                 results: 아이디 확인 결과값 
                         아이디가 일을시: {"check":1} 

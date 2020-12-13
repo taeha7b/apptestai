@@ -14,7 +14,7 @@ class UserService:
             고객 정보 생성(Business Layer)
             Args :
                 user_info: 고객 데이터
-                db : 데이터베이스 연결객체
+                session : 데이터베이스 연결객체
             Returns :
                 name_validate: 이름에 문제 발생시
                 birthday_validate: 생년월일에 문제 있을시
@@ -42,7 +42,7 @@ class UserService:
             고객 정보 목록 조회(Business Layer)
             Args :
                 page: 요청 받은 페이지 번호
-                db : 데이터베이스 연결객체
+                session : 데이터베이스 연결객체
             Returns :
                 results: 고객 정보 목록
             Author :
@@ -62,7 +62,7 @@ class UserService:
             고객 정보 변경(Business Layer)
             Args :
                 user_info: 고객 데이터
-                db : 데이터베이스 연결객체
+                session : 데이터베이스 연결객체
             Returns :
                 name_validate: 이름에 문제 발생시
                 birthday_validate: 생년월일에 문제 있을시
@@ -87,7 +87,7 @@ class UserService:
             고객 정보 삭제(Business Layer)
             Args :
                 user_info: 고객 데이터
-                db : 데이터베이스 연결객체
+                session : 데이터베이스 연결객체
             Returns :
                 account_validate: 계정에 문제가 있을시
                 False: 이미 삭제된 아이디로 삭제 요청시
@@ -109,7 +109,7 @@ class UserService:
             고객 정보 상세 조회(Business Layer)
             Args :
                 account: 고객 아이디
-                db : 데이터베이스 연결객체
+                session : 데이터베이스 연결객체
             Returns :
                 results: 고객 정보 상세 조회 결과
             Author :
