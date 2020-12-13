@@ -41,4 +41,4 @@
 
 **`selenium/tesk2.py에 구현 하였습니다.`**
 #### API문서
-https://wecode-project1-hince.postman.co/workspace/88595b9c-b0af-498c-8a10-50573a860ec9/documentation/12264608-2b5caacc-a46f-47fa-9ea9-0baa6f33b04e
+https://web.postman.co/workspace/My-Workspace~88595b9c-b0af-498c-8a10-50573a860ec9/documentation/12264608-2b5caacc-a46f-47fa-9ea9-0baa6f33b04e
