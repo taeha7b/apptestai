@@ -22,6 +22,7 @@ with open('./test.json', 'w', encoding='utf-8') as f:
     count =0
     temp = dict()
     temp2= []
+    
     find_element = len(driver.find_elements_by_tag_name('a'))
     for num in range(find_element):
         webelement = driver.find_elements_by_tag_name('a')[num]

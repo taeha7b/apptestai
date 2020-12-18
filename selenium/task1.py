@@ -20,6 +20,10 @@ mission = [
     '//*[@id="nav-menu-item-8787"]/a/span/span'
     ]
 
+
+
+
+
 for xpath in mission:
     time.sleep(2)
     driver.find_element_by_xpath(xpath).click()

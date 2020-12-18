@@ -26,8 +26,6 @@ def create_app(test_config = None):
         app.config.update(test_config)
 
     # database engin와 연동된 session maker 생성, connection 필요시마다 session instance 생성
-    # 
-
     database = create_engine(DB_URL, encoding ='utf-8', pool_size = 10, max_overflow = 5, poolclass = QueuePool)
   
     Session = sessionmaker(bind = database)

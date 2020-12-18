@@ -183,6 +183,7 @@ dmypy.json
 !.vscode/extensions.json
 *.code-workspace
 
-config.py
+crud_ver1/config.py
+crud_ver2/config.py
 
 # End of https://www.toptal.com/developers/gitignore/api/linux,vscode,flask,git
