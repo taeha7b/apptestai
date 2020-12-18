@@ -29,7 +29,7 @@
 - 이동이 완료되면, Contact 화면에서, "Get In Touch With Us" 부분의 각 항목에 임의의 값을 입력 후 "SEND" 버튼 클릭
 - 이상의 것을 Selenium을 사용해서 코드로 자동처리해 주세요.
 
-**`selenium/tesk1.py에 구현 하였습니다.`**
+**`selenium/task1.py에 구현 하였습니다.`**
 
 ### 2. Version1의 내용을 발전시켜서, 다음의 요구사항을 구현해주세요(Version 2).
 - https://apptest.ai의 사이트에서, Click 가능한 모든 요소(element)를 추출해주세요.
@@ -39,6 +39,6 @@
 - 각 element들이 클릭될 때마다, 해당 화면에 대해서 스크린샷 이미지를 저장하세요.
 - 이상의 코드를 어떠한 라이브러리/프레임웍을 사용해도 좋으니, Python 기반으로 작성해 주세요.
 
-**`selenium/tesk2.py에 구현 하였습니다.`**
+**`selenium/task2.py에 구현 하였습니다.`**
 #### API문서
 https://web.postman.co/workspace/My-Workspace~88595b9c-b0af-498c-8a10-50573a860ec9/documentation/12264608-2b5caacc-a46f-47fa-9ea9-0baa6f33b04e
